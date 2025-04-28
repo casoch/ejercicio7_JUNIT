@@ -1,8 +1,22 @@
 package ejercicio7JUnit;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.List;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import ejercicio7JUnit.Movimiento.Tipo;
+
 public class CuentaBancariaHistorialTest {
+	CuentaBancaria cb;
+	
+	@BeforeEach
+	void init()
+	{
+		cb = new CuentaBancaria(100);
+	}
 	
 	/**
 	 * Comprobar que el movimiento del ingreso inicial se guarda bien
@@ -10,7 +24,11 @@ public class CuentaBancariaHistorialTest {
 	@Test
 	void historial_IngresoInicial()
 	{
-		
+		List<Movimiento> historial = cb.getHistorial();
+		assertEquals(historial.size(), 1);
+		Movimiento m = historial.get(0);
+		assertEquals(m.getTipo(), Tipo.DEPOSITO);
+		assertEquals(m.getCantidad(), 100);
 	}
 	
 	/**
@@ -20,7 +38,12 @@ public class CuentaBancariaHistorialTest {
 	@Test
 	void historial_AddDepositoCorrecto()
 	{
-		
+		cb.depositar(25);
+		List<Movimiento> historial = cb.getHistorial();
+		assertEquals(2, historial.size());
+		Movimiento mov = historial.get(1);
+		assertEquals(mov.getTipo(), Tipo.DEPOSITO);
+		assertEquals(mov.getCantidad(), 25);
 	}
 	
 	/**
@@ -29,7 +52,9 @@ public class CuentaBancariaHistorialTest {
 	@Test
 	void historial_AddDepositoIncorrecto()
 	{
-		
+		cb.depositar(-25);
+		List<Movimiento> historial = cb.getHistorial();
+		assertEquals(1, historial.size());
 	}
 	
 	/**
@@ -39,7 +64,12 @@ public class CuentaBancariaHistorialTest {
 	@Test
 	void historial_AddRetiroCorrecto()
 	{
-		
+		cb.retirar(25);
+		List<Movimiento> historial = cb.getHistorial();
+		assertEquals(2, historial.size());
+		Movimiento mov = historial.get(1);
+		assertEquals(mov.getTipo(), Tipo.RETIRO);
+		assertEquals(mov.getCantidad(), 25);
 	}
 	
 	/**
@@ -49,6 +79,9 @@ public class CuentaBancariaHistorialTest {
 	@Test
 	void historial_AddRetiroIncorrecto()
 	{
-		
+		cb.retirar(110);
+		assertEquals(1, cb.getHistorial().size());
+		cb.retirar(-50);
+		assertEquals(1, cb.getHistorial().size());
 	}
 }

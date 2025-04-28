@@ -30,7 +30,7 @@ public class CuentaBancaria {
     public boolean depositar(double cantidad) {
         if (cantidad <= 0) return false;
         saldo += cantidad;
-        Movimiento m = new Movimiento(Tipo.DEPOSITO, saldo);
+        Movimiento m = new Movimiento(Tipo.DEPOSITO, cantidad);
 		this.historial.add(m);
         return true;
     }
@@ -38,7 +38,7 @@ public class CuentaBancaria {
     public boolean retirar(double cantidad) {
         if (cantidad <= 0 || cantidad > saldo) return false;
         saldo -= cantidad;
-        Movimiento m = new Movimiento(Tipo.RETIRO, saldo);
+        Movimiento m = new Movimiento(Tipo.RETIRO, cantidad);
 		this.historial.add(m);
         return true;
     }
